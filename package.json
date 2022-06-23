@@ -1,0 +1,11 @@
+{
+    "name": "test-ht1",
+    "private": true,
+    "type": "module",
+    "scripts": {
+    },
+    "dependencies": {
+    },
+    "devDependencies": {
+    }
+}
