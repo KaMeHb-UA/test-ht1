@@ -9,6 +9,8 @@
 		"paths": {
 			"@/*": ["src/*"],
 		},
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
 	},
 	"include": [
 		"src/**/*",
