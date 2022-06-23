@@ -3,6 +3,9 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "build": "rm -rf dist && node build --dist",
+        "start": "rm -rf dist && node build && cd dist && node --enable-source-maps index",
+        "test": "rm -rf dist && node build --tests && cd dist && node --enable-source-maps index"
     },
     "dependencies": {
         "pg-promise": "^10.11.1"
