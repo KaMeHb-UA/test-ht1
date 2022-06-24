@@ -1,6 +1,7 @@
 import * as argsParser from '@/components/args';
 import * as postgresConnector from '@/components/postgres';
 import * as dataInterface from '@/components/data';
+import * as githubComponent from '@/components/github';
 import { loadComponent, registerComponent } from '@/services/component-registration';
 import { argv, env } from 'node:process';
 
@@ -21,6 +22,7 @@ await Promise.all([
     argsParser,
     postgresConnector,
     dataInterface,
+    githubComponent,
 ].map(v => registerComponent(v, loadOptions)));
 
 export type LoadOptions = typeof loadOptions;
