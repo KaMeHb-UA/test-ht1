@@ -2,7 +2,7 @@
 import { build } from 'esbuild';
 import { exit, argv } from 'node:process';
 import { resolve } from 'node:path';
-import { writeFile, mkdir } from 'node:fs/promises';
+import { writeFile, mkdir, chmod } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import importGlobPlugin from 'esbuild-plugin-import-glob';
 
@@ -31,7 +31,7 @@ const buildConfig = {
   legalComments: 'none',
   sourcemap: release ? false : 'inline',
   banner: {
-    js: 'import{createRequire}from"module";const require=createRequire(import.meta.url);' + dotenvImport,
+    js: '#!/usr/bin/env node\nimport{createRequire}from"module";const require=createRequire(import.meta.url);' + dotenvImport,
   },
   external: [
     'pg-native',
@@ -60,6 +60,7 @@ try{
   release && console.log(
     `Built for production with esbuild in ${Date.now() - start} ms`,
   );
+  chmod(buildConfig.outfile, 0o755);
 } catch(e){
   exit(1);
 }
