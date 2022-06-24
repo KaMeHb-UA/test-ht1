@@ -1,5 +1,6 @@
 import * as argsParser from '@/components/args';
 import * as postgresConnector from '@/components/postgres';
+import * as dataInterface from '@/components/data';
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
@@ -11,4 +12,5 @@ type Remap<A extends any[]> = UnionToIntersection<{
 export type Components = Remap<[
     typeof argsParser,
     typeof postgresConnector,
+    typeof dataInterface,
 ]>;
