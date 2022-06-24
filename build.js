@@ -4,6 +4,7 @@ import { exit, argv } from 'node:process';
 import { resolve } from 'node:path';
 import { writeFile, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import importGlobPlugin from 'esbuild-plugin-import-glob';
 
 const dirname = resolve(fileURLToPath(import.meta.url), '..'),
   srcDir = resolve(dirname, 'src'),
@@ -35,6 +36,13 @@ const buildConfig = {
   external: [
     'pg-native',
   ],
+  plugins: [
+    // @ts-ignore
+    importGlobPlugin.default(),
+  ],
+  loader: {
+      '.sql': 'file',
+  },
 };
 
 const distPackageJson = {
