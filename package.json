@@ -8,6 +8,7 @@
         "test": "rm -rf dist && node build --tests && cd dist && node --enable-source-maps index"
     },
     "dependencies": {
+        "@octokit/rest": "^18.12.0",
         "pg-promise": "^10.11.1"
     },
     "devDependencies": {
