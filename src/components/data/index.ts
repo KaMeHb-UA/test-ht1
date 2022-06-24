@@ -44,6 +44,10 @@ function createDataInterface(db: import('./types').DB){
                 }, []),
             );
         },
+        async getUsers(){
+            const users = await db.any<{ name: string }>('SELECT name FROM users');
+            return users.map(({ name }) => name);
+        },
         async getUsersByLocation(location: string){
             const users = await db.any<{ name: string }>(
                 'SELECT name FROM users WHERE location = $1',
