@@ -68,12 +68,12 @@ function createDataInterface(db: import('./types').DB){
     };
 }
 
-export default async ({ loadComponent, argv, defaultArgs }: import('..').LoadOptions) => {
-    const [ parseArgs, getDB ] = await Promise.all([
+export default async ({ loadComponent }: import('..').LoadOptions) => {
+    const [ getArgs, getDB ] = await Promise.all([
         loadComponent('CLI arguments parser'),
         loadComponent('Postgres connector'),
     ]);
-    const { options: { 'metadata-table': metadataTableName } } = parseArgs(argv, defaultArgs);
+    const { options: { 'metadata-table': metadataTableName } } = getArgs();
     if(!metadataTableName) throw new TypeError('metadata-table option should not be empty');
     const db = getDB();
     await migrate(db, metadataTableName);

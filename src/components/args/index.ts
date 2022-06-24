@@ -1,7 +1,7 @@
 export const name = 'CLI arguments parser';
 
-export default ({}: import('..').LoadOptions) => (argv: string[], defaults: any = {}) => {
-    const options: { [x: string]: string } = Object.assign({}, defaults);
+export default ({ argv, defaultArgs }: import('..').LoadOptions) => () => {
+    const options: { [x: string]: string } = Object.assign({}, defaultArgs);
     let i = 2, arg: string;
     if(argv.length > 2) while(arg = argv[i++], arg.startsWith('--')){
         const [ name, ...rest ] = arg.slice(2).split('=');
