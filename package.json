@@ -10,6 +10,7 @@
     "dependencies": {
         "@octokit/core": "^3.6.0",
         "@octokit/plugin-paginate-rest": "^2.19.0",
+        "array-from-async": "^2.0.3",
         "pg-promise": "^10.11.1"
     },
     "devDependencies": {
