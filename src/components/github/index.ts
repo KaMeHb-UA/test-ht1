@@ -8,12 +8,24 @@ const OctokitWithPagination = Octokit.plugin(paginateRest);
 
 type LoadOptions = import('..').LoadOptions;
 
+type Repo = {
+    id: number;
+    name: string;
+    url: string;
+    language: string;
+};
+
+type UserData = {
+    location: string;
+    name: string;
+};
+
 export const name = 'GitHub';
 
 export default ({}: LoadOptions) => {
     const octokit = new OctokitWithPagination();
     return () => ({
-        async getRepos(username: string){
+        async getRepos(username: string): Promise<Repo[]> {
             const res = await fromAsync(octokit.paginate.iterator('GET /users/{username}/repos', { username }));
             return res.map(v => v.data).flat().map(({ id, name, html_url, language }) => ({
                 id,
@@ -22,7 +34,7 @@ export default ({}: LoadOptions) => {
                 language,
             }));
         },
-        async getUserData(username: string){
+        async getUserData(username: string): Promise<UserData> {
             for await(const resp of octokit.paginate.iterator('GET /users/{username}', { username })){
                 const { location } = resp.data as any;
                 return {
