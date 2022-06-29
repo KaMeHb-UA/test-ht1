@@ -16,7 +16,7 @@ export async function getMetadata<N extends string>(db: DB, metadataTableName: s
     return JSON.parse(value);
 }
 
-export async function setMetadata<N extends string>(db: DB, metadataTableName: string, name: N, value: Value<N>){
+export async function setMetadata<N extends string>(db: DB, metadataTableName: string, name: N, value: Value<N>): Promise<void> {
     await db.any(
         `INSERT INTO ${metadataTableName} (name, value) VALUES ($1, $2) ON CONFLICT (name) DO UPDATE SET value = $2;`,
         [ name, JSON.stringify(value) ],

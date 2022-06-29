@@ -14,9 +14,18 @@ type RepoData = {
     url: string;
 }
 
-function createDataInterface(db: import('./types').DB){
+type DataInterface = {
+    addUser(data: UserData): Promise<void>;
+    addRepos(user: string, repos: RepoData[]): Promise<void>;
+    getUsers(): Promise<string[]>;
+    getUsersByLocation(location: string): Promise<string[]>;
+    getUsersByLanguage(language: string): Promise<string[]>;
+    getUsersByLocationAndLanguage(location: string, language: string): Promise<string[]>;
+}
+
+function createDataInterface(db: import('./types').DB): DataInterface {
     return {
-        async addUser(data: UserData){
+        async addUser(data: UserData): Promise<void> {
             const keys = [
                 'name',
                 'location',
@@ -26,7 +35,7 @@ function createDataInterface(db: import('./types').DB){
                 keys.map(name => data[name]),
             );
         },
-        async addRepos(user: string, repos: RepoData[]){
+        async addRepos(user: string, repos: RepoData[]): Promise<void> {
             const keys = [
                 '"user"',
                 'id',
@@ -44,25 +53,25 @@ function createDataInterface(db: import('./types').DB){
                 }, []),
             );
         },
-        async getUsers(){
+        async getUsers(): Promise<string[]> {
             const users = await db.any<{ name: string }>('SELECT name FROM users');
             return users.map(({ name }) => name);
         },
-        async getUsersByLocation(location: string){
+        async getUsersByLocation(location: string): Promise<string[]> {
             const users = await db.any<{ name: string }>(
                 'SELECT name FROM users WHERE location = $1',
                 [ location ],
             );
             return users.map(({ name }) => name);
         },
-        async getUsersByLanguage(language: string){
+        async getUsersByLanguage(language: string): Promise<string[]> {
             const users = await db.any<{ user: string }>(
                 'SELECT DISTINCT "user" FROM repos WHERE language = $1',
                 [ language ],
             );
             return users.map(({ user }) => user);
         },
-        async getUsersByLocationAndLanguage(location: string, language: string){
+        async getUsersByLocationAndLanguage(location: string, language: string): Promise<string[]> {
             const users = await db.any<{ user: string }>(
                 'SELECT DISTINCT repos."user" FROM repos LEFT JOIN users ON repos."user" = users.name WHERE repos.language = $1 AND users.location = $2',
                 [ language, location ],
@@ -72,7 +81,7 @@ function createDataInterface(db: import('./types').DB){
     };
 }
 
-export default async ({ loadComponent }: import('..').LoadOptions) => {
+export default async ({ loadComponent }: import('..').LoadOptions): Promise<() => DataInterface> => {
     const [ getArgs, getDB ] = await Promise.all([
         loadComponent('CLI arguments parser'),
         loadComponent('Postgres connector'),

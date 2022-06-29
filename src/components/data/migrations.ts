@@ -29,9 +29,7 @@ async function setVersion(db: DB, metadataTableName: string, version: number){
     await setMetadata(db, metadataTableName, 'version', version);
 }
 
-const emptyMigration = [] as [];
-
-export default async (db: DB, metadataTableName: string) => {
+export default async (db: DB, metadataTableName: string): Promise<void> => {
     const dbVersion = await getVersion(db, metadataTableName);
     const migrationsVersion = sorted.length;
     if(dbVersion > migrationsVersion) throw new Error('DB scheme version is higher than exist in migrations. Aborting migration');
